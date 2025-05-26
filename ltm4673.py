@@ -160,7 +160,7 @@ class LTC2975:
 
     def write_register_byte(self, reg, value):
         self.bus.write_byte_data(self.addr, reg, value)
-
+        
     def read_register_byte(self, reg):
         value = self.bus.read_byte_data(self.addr, reg)
         return value
@@ -761,7 +761,7 @@ class LTC2975:
             mfr_watchdog_t_first_value = int((hex(raw_mfr_watchdog_t_first & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_mfr_watchdog_t_first & 0xF800) >> 11 ))
             return mfr_watchdog_t_first_value
 
-    def mfr_watchdog_t_first(self, value = None):
+    def mfr_watchdog_t(self, value = None):
         if value is not None:
             self.write_register(self.REG_MFR_WATCHDOG_T, value)
         else:
@@ -781,7 +781,7 @@ class LTC2975:
         else:
             return self.read_register(self.REG_MFR_PADS)
 
-    def mfr_i2c_bade_address(self, value = None):
+    def mfr_i2c_base_address(self, value = None):
         if value is not None:
             self.write_register_byte(self.REG_MFR_I2C_BASE_ADDRESS, value)
         else:
@@ -797,9 +797,9 @@ class LTC2975:
         if value is not None:
             self.write_register(self.REG_MFR_IIN_CAL_GAIN, value)
         else:
-            raw_mfr_iin_cal_gain= self.read_register(self.REG_MFR_IIN_CAL_GAIN)
+            raw_mfr_iin_cal_gain = self.read_register(self.REG_MFR_IIN_CAL_GAIN)
             mfr_iin_cal_gain_value = int((hex(raw_mfr_iin_cal_gain & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_mfr_iin_cal_gain & 0xF800) >> 11 ))
-            return mfr_iin_cal_gain_value
+            return  mfr_iin_cal_gain_value
 
     def mfr_vout_discharge_threshold(self, value = None):
         if value is not None:
