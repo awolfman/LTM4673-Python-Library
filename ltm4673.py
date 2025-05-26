@@ -785,7 +785,7 @@ class LTC2975:
         if value is not None:
             self.write_register_byte(self.REG_MFR_I2C_BASE_ADDRESS, value)
         else:
-            return self.read_register_byte(self.REG_MFR_I2C_BASE_ADDRESS_MASK)
+            return self.read_register_byte(self.REG_MFR_I2C_BASE_ADDRESS)
 
     def mfr_special_id(self, value = None):
         if value is not None:
