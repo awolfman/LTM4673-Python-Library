@@ -206,27 +206,27 @@ class LTC2975:
 
     def vout_command(self, value = None):
         if value is not None:
-            self.write_register(self.REG_VOUT_COMMAND, value/N)
+            self.write_register(self.REG_VOUT_COMMAND, value)
         else:
-            return self.read_register(self.REG_VOUT_COMMAND) * N
+            return self.read_register(self.REG_VOUT_COMMAND) * 2**-13
             
     def vout_max(self, value = None):
         if value is not None:
-            self.write_register(self.REG_VOUT_MAX, value/N)
+            self.write_register(self.REG_VOUT_MAX, value)
         else:
-            return self.read_register(self.REG_VOUT_MAX) * N
+            return self.read_register(self.REG_VOUT_MAX) * 2**-13
             
     def vout_margin_high(self, value = None):
         if value is not None:
-            self.write_register(self.REG_VOUT_MARGIN_HIGH, value/N)
+            self.write_register(self.REG_VOUT_MARGIN_HIGH, value)
         else:
-            return self.read_register(self.REG_VOUT_MARGIN_HIGH) * N
+            return self.read_register(self.REG_VOUT_MARGIN_HIGH) * 2**-13
 
     def vout_margin_low(self, value = None):
         if value is not None:
-            self.write_register(self.REG_VOUT_MARGIN_LOW, value/N)
+            self.write_register(self.REG_VOUT_MARGIN_LOW, value)
         else:
-            return self.read_register(self.REG_VOUT_LOW) * N
+            return self.read_register(self.REG_VOUT_LOW) * 2**-13
 
     def vin_on(self, value = None):
         if value is not None:
@@ -251,9 +251,9 @@ class LTC2975:
 
     def vout_ov_fault_limit(self, value = None):
         if value is not None:
-            self.write_register(self.VOUT_OV_FAULT_LIMIT, value/N)
+            self.write_register(self.VOUT_OV_FAULT_LIMIT, value )
         else:
-            return self.read_register(self.VOUT_OV_FAULT_LIMIT) * N
+            return self.read_register(self.VOUT_OV_FAULT_LIMIT) * 2**-13
 
     def vout_ov_fault_response(self, value = None):
         if value is not None:
@@ -263,21 +263,21 @@ class LTC2975:
 
     def vout_ov_warn_limit(self, value = None):
         if value is not None:
-            self.write_register(self.REG_VOUT_OV_WARN_LIMIT, value/N)
+            self.write_register(self.REG_VOUT_OV_WARN_LIMIT, value )
         else:
-            return self.read_register(self.REG_VOUT_OV_WARN_LIMIT) * N
+            return self.read_register(self.REG_VOUT_OV_WARN_LIMIT) * 2**-13
 
     def vout_uv_warn_limit(self, value = None):
         if value is not None:
-            self.write_register(self.REG_VOUT_UV_WARN_LIMIT, value/N)
+            self.write_register(self.REG_VOUT_UV_WARN_LIMIT, value )
         else:
-            return self.read_register(self.REG_VOUT_UV_WARN_LIMIT) * N
+            return self.read_register(self.REG_VOUT_UV_WARN_LIMIT) * 2**-13
 
     def vout_uv_fault_limit(self, value = None):
         if value is not None:
-            self.write_register(self.VOUT_UV_FAULT_LIMIT, value/N)
+            self.write_register(self.VOUT_UV_FAULT_LIMIT, value )
         else:
-            return self.read_register(self.VOUT_UV_FAULT_LIMIT) * N
+            return self.read_register(self.VOUT_UV_FAULT_LIMIT) * 2**-13
 
     def vout_uv_fault_response(self, value = None):
         if value is not None:
@@ -411,15 +411,15 @@ class LTC2975:
 
     def power_good_on(self, value = None):
         if value is not None:
-            self.write_register(self.REG_POWER_GOOD_ON, value/N)
+            self.write_register(self.REG_POWER_GOOD_ON, value )
         else:
-            return self.read_register(self.REG_POWER_GOOD_ON) * N
+            return self.read_register(self.REG_POWER_GOOD_ON) * 2**-13
 
     def power_good_off(self, value = None):
         if value is not None:
-            self.write_register(self.REG_POWER_GOOD_OFF, value/N)
+            self.write_register(self.REG_POWER_GOOD_OFF, value )
         else:
-            return self.read_register(self.REG_POWER_GOOD_OFF) * N
+            return self.read_register(self.REG_POWER_GOOD_OFF) * 2**-13
 
     def ton_delay(self, value = None):
         if value is not None:
@@ -494,7 +494,7 @@ class LTC2975:
         return  read_iin_value
 
     def read_vout(self):
-        return self.read_register(self.REG_READ_VOUT) * N
+        return self.read_register(self.REG_READ_VOUT) * 2**-13
 
     def read_iout(self):
         raw_read_iout = self.read_register(self.REG_READ_IIN)
@@ -743,13 +743,13 @@ class LTC2975:
             return mfr_restart_delay_value
 
     def mfr_vout_peak(self):
-        return self.read_register(self.REG_MFR_VOUT_PEAK) * N
+        return self.read_register(self.REG_MFR_VOUT_PEAK) * 2**-13
 
     def mfr_vin_peak(self):
-        return self.read_register(self.REG_MFR_VIN_PEAK) * N
+        return self.read_register(self.REG_MFR_VIN_PEAK) * 2**-13
 
     def mfr_temperature_1_peak(self):
-        return self.read_register(self.REG_MFR_TEMPERATURE_1_PEAK) * N
+        return self.read_register(self.REG_MFR_TEMPERATURE_1_PEAK) * 2**-13
 
     def mfr_dac(self, value = None):
         if value is not None:
@@ -866,7 +866,7 @@ class LTC2975:
             return mfr_temp_1_offset_value
 
     def mfr_vout_min(self):
-        return self.read_register(self.REG_MFR_VOUT_MIN) * N
+        return self.read_register(self.REG_MFR_VOUT_MIN) * 2**-13
 
     def mfr_vin_min(self):
         raw_mfr_vin_min = self.read_register(self.REG_MFR_VIN_MIN)
