@@ -25,7 +25,7 @@ class LTC2975:
     REG_VOUT_OV_FAULT_RESPONSE = 0x41
     REG_VOUT_OV_WARN_LIMIT = 0x42
     REG_VOUT_UV_WARN_LIMIT = 0x43
-    REG_VOUT_UV_FAULT_LIMIT = 0x43
+    REG_VOUT_UV_FAULT_LIMIT = 0x44
     REG_VOUT_UV_FAULT_RESPONSE = 0x45
     REG_IOUT_OC_FAULT_LIMIT = 0x46
     REG_IOUT_OC_FAULT_RESPONSE = 0x47
@@ -273,6 +273,12 @@ class LTC2975:
         else:
             return self.read_register(self.REG_VOUT_UV_WARN_LIMIT) * N
 
+    def vout_uv_fault_limit(self, value = None):
+        if value is not None:
+            self.write_register(self.VOUT_UV_FAULT_LIMIT, value/N)
+        else:
+            return self.read_register(self.VOUT_UV_FAULT_LIMIT) * N
+
     def vout_uv_fault_response(self, value = None):
         if value is not None:
             self.write_register_byte(self.REG_VOUT_UV_FAULT_RESPONSE, value)
@@ -352,6 +358,12 @@ class LTC2975:
             raw_ut_fault_limit = self.read_register(self.REG_UT_FAULT_LIMIT)
             ut_fault_limit_value = int((hex(raw_ut_fault_limit & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_ut_fault_limit & 0xF800) >> 11 ))
             return  ut_fault_limit_value
+
+    def ut_fault_response(self, value = None):
+        if value is not None:
+            self.write_register_byte(self.UT_FAULT_RESPONSE, value)
+        else:
+            return self.read_register_byte(self.UT_FAULT_RESPONSE)
 
     def vin_ov_fault_limit(self, value = None):
         if value is not None:
@@ -827,17 +839,23 @@ class LTC2975:
     def mfr_common(self):
         return self.read_register_byte(self.REG_MFR_COMMON)
 
-    def mfr_special_id(self, value = None):
+    def mfr_iout_cal_gain_tc(self, value = None):
         if value is not None:
-            self.write_register(self.REG_MFR_SPECIAL_ID, value)
+            self.write_register(self.REG_MFR_IOUT_CAL_GAIN_TC, value)
         else:
-            return self.read_register(self.REG_MFR_SPECIAL_ID)
+            return self.read_register(self.REG_MFR_IOUT_CAL_GAIN_TC)
 
     def mfr_retry_count(self, value = None):
         if value is not None:
             self.write_register_byte(self.REG_MFR_RETRY_COUNT, value)
         else:
             return self.read_register_byte(self.REG_MFR_RETRY_COUNT)
+
+    def mfr_temp_1_gain(self, value = None):
+        if value is not None:
+            self.write_register(self.REG_MFR_TEMP_1_GAIN, value)
+        else:
+            return self.read_register(self.REG_MFR_TEMP_1_GAIN)
 
     def mfr_temp_1_offset(self, value = None):
         if value is not None:
