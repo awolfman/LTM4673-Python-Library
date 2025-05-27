@@ -75,7 +75,7 @@ class LTC2975:
     REG_USER_DATA_04 = 0xB4
     REG_MFR_LTC_RESERVED_1 = 0xB5
     REG_MFR_T_SELF_HEAT = 0xB8
-    REG_MFR_IOUT_CAL_GAIN_TAU__INV = 0xB9
+    REG_MFR_IOUT_CAL_GAIN_TAU_INV = 0xB9
     REG_MFR_IOUT_CAL_GAIN_THETA = 0xBA
     REG_MFR_READ_IOUT = 0xBB
     REG_MFR_LTC_RESERVED_2 = 0xBC
@@ -251,9 +251,9 @@ class LTC2975:
 
     def vout_ov_fault_limit(self, value = None):
         if value is not None:
-            self.write_register(self.VOUT_OV_FAULT_LIMIT, value )
+            self.write_register(self.REG_VOUT_OV_FAULT_LIMIT, value)
         else:
-            return self.read_register(self.VOUT_OV_FAULT_LIMIT) * 2**-13
+            return self.read_register(self.REG_VOUT_OV_FAULT_LIMIT) * 2**-13
 
     def vout_ov_fault_response(self, value = None):
         if value is not None:
@@ -275,9 +275,9 @@ class LTC2975:
 
     def vout_uv_fault_limit(self, value = None):
         if value is not None:
-            self.write_register(self.VOUT_UV_FAULT_LIMIT, value )
+            self.write_register(self.REG_VOUT_UV_FAULT_LIMIT, value )
         else:
-            return self.read_register(self.VOUT_UV_FAULT_LIMIT) * 2**-13
+            return self.read_register(self.REG_VOUT_UV_FAULT_LIMIT) * 2**-13
 
     def vout_uv_fault_response(self, value = None):
         if value is not None:
@@ -309,9 +309,9 @@ class LTC2975:
 
     def iout_uc_fault_limit(self, value = None):
         if value is not None:
-            self.write_register(self.REG_IOUT_UC_FAUILT_LIMIT, value)
+            self.write_register(self.REG_IOUT_UC_FAULT_LIMIT, value)
         else:
-            raw_iout_uc_fault_limit = self.read_register(self.REG_IOUT_UC_FAUILT_LIMIT)
+            raw_iout_uc_fault_limit = self.read_register(self.REG_IOUT_UC_FAULT_LIMIT)
             raw_iout_uc_fault_limitvalue = int((hex(raw_iout_uc_fault_limit & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_iout_uc_fault_limit & 0xF800) >> 11 ))
             return  raw_iout_uc_fault_limitvalue
 
@@ -361,9 +361,9 @@ class LTC2975:
 
     def ut_fault_response(self, value = None):
         if value is not None:
-            self.write_register_byte(self.UT_FAULT_RESPONSE, value)
+            self.write_register_byte(self.REG_UT_FAULT_RESPONSE, value)
         else:
-            return self.read_register_byte(self.UT_FAULT_RESPONSE)
+            return self.read_register_byte(self.REG_UT_FAULT_RESPONSE)
 
     def vin_ov_fault_limit(self, value = None):
         if value is not None:
