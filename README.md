@@ -86,4 +86,3 @@ print(f"Device ID: {device_id}")
 ```
 ## To Do's:
 - [ ] Implement block reading of registers
-- [ ] Implement reading/writing of CF registers
