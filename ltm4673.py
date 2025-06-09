@@ -143,6 +143,20 @@ class LTC2975:
             value -= 1 << bits
         return value
 
+    #method for computing twos complement
+    def twos_comp(self, val, bits):
+        #compute the 2's complement of int value val
+        if (val & (1 << (bits - 1))) != 0: # if sign bit is set e.g., 8bit: 128-255
+            val = val - (1 << bits)        # compute negative value
+        return val
+
+    #Decode/encode Linear data format => X=Y*2^N
+    def decodePMBus_Data(self, value)
+        N = value >> 11
+        Y = value & 0x7FF
+        message = Y*2**(self.twos_comp(N, 5))
+        return message
+
     def __init__(self, bus_num=DEFAULT_BUS, addr=0x40):
         self.bus = smbus.SMBus(bus_num)
         self.addr = addr
@@ -232,21 +246,18 @@ class LTC2975:
         if value is not None:
             self.write_register(self.REG_VIN_ON, value)
         else:
-            raw_vin_on = self.read_register(self.REG_VIN_ON)
-            vin_on_value = int((hex(raw_vin_on & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_vin_on & 0xF800) >> 11 ))
+            vin_on_value = self.decodePMBus(self.read_register(self.REG_VIN_ON) )
             return  vin_on_value
 
     def vin_off(self, value = None):
         if value is not None:
             self.write_register(self.REG_VIN_OFF, value)
         else:
-            raw_vin_off = self.read_register(self.REG_VIN_OFF)
-            vin_off_value = int((hex(raw_vin_off & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_vin_off & 0xF800) >> 11 ))
+            vin_off_value = self.decodePMBus(self.read_register(self.REG_VIN_OFF) )
             return  vin_off_value
 
     def iout_cal_gain(self):
-        raw_iout_cal_gain = self.read_register(self.REG_IOUT_CAL_GAIN)
-        iout_cal_gain_value = int((hex(raw_iout_cal_gain & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_iout_cal_gain & 0xF800) >> 11 ))
+        iout_cal_gain_value = self.decodePMBus(self.read_register(self.REG_IOUT_CAL_GAIN) )
         return iout_cal_gain_value
 
     def vout_ov_fault_limit(self, value = None):
@@ -289,8 +300,7 @@ class LTC2975:
         if value is not None:
             self.write_register(self.REG_IOUT_OC_FAULT_LIMIT, value)
         else:
-            raw_iout_oc_fault_limit = self.read_register(self.REG_IOUT_OC_FAULT_LIMIT)
-            iout_oc_fault_limit_value = int((hex(raw_iout_oc_fault_limit & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_iout_oc_fault_limit & 0xF800) >> 11 ))
+            iout_oc_fault_limit_value = self.decodePMBus(self.read_register(self.REG_IOUT_OC_FAULT_LIMIT) )
             return  iout_oc_fault_limit_value
 
     def iout_oc_fault_response(self, value = None):
@@ -303,16 +313,14 @@ class LTC2975:
         if value is not None:
             self.write_register(self.REG_IOUT_OC_WARN_LIMIT, value)
         else:
-            raw_iout_oc_warn_limit = self.read_register(self.REG_IOUT_OC_WARN_LIMIT)
-            iout_oc_warn_limit_value = int((hex(raw_iout_oc_warn_limit & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_iout_oc_warn_limit & 0xF800) >> 11 ))
+            iout_oc_warn_limit_value = self.decodePMBus(self.read_register(self.REG_IOUT_OC_WARN_LIMIT) )
             return  iout_oc_warn_limit_value
 
     def iout_uc_fault_limit(self, value = None):
         if value is not None:
             self.write_register(self.REG_IOUT_UC_FAULT_LIMIT, value)
         else:
-            raw_iout_uc_fault_limit = self.read_register(self.REG_IOUT_UC_FAULT_LIMIT)
-            raw_iout_uc_fault_limitvalue = int((hex(raw_iout_uc_fault_limit & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_iout_uc_fault_limit & 0xF800) >> 11 ))
+            raw_iout_uc_fault_limitvalue = self.decodePMBus(self.read_register(self.REG_IOUT_UC_FAULT_LIMIT) )
             return  raw_iout_uc_fault_limitvalue
 
     def iout_uc_fault_response(self, value = None):
@@ -325,8 +333,7 @@ class LTC2975:
         if value is not None:
             self.write_register(self.REG_OT_FAULT_LIMIT, value)
         else:
-            raw_ot_fault_limit = self.read_register(self.REG_OT_FAULT_LIMIT)
-            ot_fault_limitvalue = int((hex(raw_ot_fault_limit & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_ot_fault_limit & 0xF800) >> 11 ))
+            ot_fault_limitvalue = self.decodePMBus(self.read_register(self.REG_OT_FAULT_LIMIT) )
             return  ot_fault_limitvalue
 
     def ot_fault_response(self, value = None):
@@ -339,24 +346,21 @@ class LTC2975:
         if value is not None:
             self.write_register(self.REG_OT_WARN_LIMIT, value)
         else:
-            raw_ot_warn_limit = self.read_register(self.REG_OT_WARN_LIMIT)
-            ot_warn_limit_value = int((hex(raw_ot_warn_limit & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_ot_warn_limit & 0xF800) >> 11 ))
+            ot_warn_limit_value = self.decodePMBus(self.read_register(self.REG_OT_WARN_LIMIT) )
             return  ot_warn_limit_value
 
     def ut_warn_limit(self, value = None):
         if value is not None:
             self.write_register(self.REG_UT_WARN_LIMIT, value)
         else:
-            raw_ut_warn_limit = self.read_register(self.REG_OT_WARN_LIMIT)
-            ut_warn_limit_value = int((hex(raw_ut_warn_limit & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_ut_warn_limit & 0xF800) >> 11 ))
+            ut_warn_limit_value = self.decodePMBus(self.read_register(self.REG_UT_WARN_LIMIT) )
             return  ut_warn_limit_value
 
     def ut_fault_limit(self, value = None):
         if value is not None:
             self.write_register(self.REG_UT_FAULT_LIMIT, value)
         else:
-            raw_ut_fault_limit = self.read_register(self.REG_UT_FAULT_LIMIT)
-            ut_fault_limit_value = int((hex(raw_ut_fault_limit & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_ut_fault_limit & 0xF800) >> 11 ))
+            ut_fault_limit_value = self.decodePMBus(self.read_register(self.REG_UT_FAULT_LIMIT) )
             return  ut_fault_limit_value
 
     def ut_fault_response(self, value = None):
@@ -369,8 +373,7 @@ class LTC2975:
         if value is not None:
             self.write_register(self.REG_VIN_OV_FAULT_LIMIT, value)
         else:
-            raw_vin_ov_fault_limit = self.read_register(self.REG_VIN_OV_FAULT_LIMIT)
-            vin_ov_fault_limit_value = int((hex(raw_vin_ov_fault_limit & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_vin_ov_fault_limit & 0xF800) >> 11 ))
+            vin_ov_fault_limit_value = self.decodePMBus(self.read_register(self.REG_VIN_OV_FAULT_LIMIT) )
             return  vin_ov_fault_limit_value
 
     def vin_ov_fault_response(self, value = None):
@@ -383,24 +386,21 @@ class LTC2975:
         if value is not None:
             self.write_register(self.REG_VIN_OV_WARN_LIMIT, value)
         else:
-            raw_vin_ov_warn_limit = self.read_register(self.REG_VIN_OV_WARN_LIMIT)
-            vin_ov_warn_limit_value = int((hex(raw_vin_ov_warn_limit & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_vin_ov_warn_limit & 0xF800) >> 11 ))
+            vin_ov_warn_limit_value = self.decodePMBus(self.read_register(self.REG_VIN_OV_WARN_LIMIT) )
             return  vin_ov_warn_limit_value
 
     def vin_uv_warn_limit(self, value = None):
         if value is not None:
             self.write_register(self.REG_VIN_UV_WARN_LIMIT, value)
         else:
-            raw_vin_uv_warn_limit = self.read_register(self.REG_VIN_UV_WARN_LIMIT)
-            vin_uv_warn_limit_value = int((hex(raw_vin_uv_warn_limit & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_vin_uv_warn_limit & 0xF800) >> 11 ))
+            vin_uv_warn_limit_value = self.decodePMBus(self.read_register(self.REG_VIN_UV_WARN_LIMIT) )
             return  vin_uv_warn_limit_value
 
     def vin_uv_fault_limit(self, value = None):
         if value is not None:
             self.write_register(self.REG_VIN_UV_FAULT_LIMIT, value)
         else:
-            raw_vin_uv_fault_limit = self.read_register(self.REG_VIN_UV_FAULT_LIMIT)
-            vin_uv_fault_limit_value = int((hex(raw_vin_uv_fault_limit & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_vin_uv_fault_limit & 0xF800) >> 11 ))
+            vin_uv_fault_limit_value = self.decodePMBus(self.read_register(self.REG_VIN_UV_FAULT_LIMIT) )
             return  vin_uv_fault_limit_value
 
     def vin_uv_fault_response(self, value = None):
@@ -425,24 +425,21 @@ class LTC2975:
         if value is not None:
             self.write_register(self.REG_TON_DELAY, value)
         else:
-            raw_ton_delay = self.read_register(self.REG_TON_DELAY)
-            ton_delay_value = int((hex(raw_ton_delay & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_ton_delay & 0xF800) >> 11 ))
+            ton_delay_value = self.decodePMBus(self.read_register(self.REG_TON_DELAY) )
             return  ton_delay_value
 
     def ton_rise(self, value = None):
         if value is not None:
             self.write_register(self.REG_TON_RISE, value)
         else:
-            raw_ton_rise = self.read_register(self.REG_TON_RISE)
-            ton_rise_value = int((hex(raw_ton_rise & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_ton_rise & 0xF800) >> 11 ))
+            ton_rise_value = self.decodePMBus(self.read_register(self.REG_TON_RISE) )
             return  ton_rise_value
 
     def ton_max_fault_limit(self, value = None):
         if value is not None:
             self.write_register(self.REG_TON_MAX_FAULT_LIMIT, value)
         else:
-            raw_ton_max_fault_limit = self.read_register(self.REG_TON_MAX_FAULT_LIMIT)
-            ton_max_fault_limit_value = int((hex(raw_ton_max_fault_limit & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_ton_max_fault_limit & 0xF800) >> 11 ))
+            ton_max_fault_limit_value = self.decodePMBus(self.read_register(self.REG_TON_MAX_FAULT_LIMIT) )
             return  ton_max_fault_limit_value
 
     def ton_max_fault_response(self, value = None):
@@ -455,8 +452,7 @@ class LTC2975:
         if value is not None:
             self.write_register(self.REG_TOFF_DELAY, value)
         else:
-            raw_toff_delay = self.read_register(self.REG_TOFF_DELAY)
-            toff_delay_value = int((hex(raw_toff_delay & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_toff_delay & 0xF800) >> 11 ))
+            toff_delay_value = self.decodePMBus(self.read_register(self.REG_TOFF_DELAY) )
             return  toff_delay_value
 
     def status_byte(self):
@@ -484,41 +480,35 @@ class LTC2975:
         return self.read_register_byte(self.REG_STATUS_MFR_SPECIFIC)
 
     def read_vin(self):
-        raw_read_vin = self.read_register(self.REG_READ_VIN)
-        read_vin_value = int((hex(raw_read_vin & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_read_vin & 0xF800) >> 11 ))
+        read_vin_value = self.decodePMBus(self.read_register(self.REG_READ_VIN) )
         return  read_vin_value
 
     def read_iin(self):
-        raw_read_iin = self.read_register(self.REG_READ_IIN)
-        read_iin_value = int((hex(raw_read_iin & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_read_iin & 0xF800) >> 11 ))
+        read_iin_value = self.decodePMBus(self.read_register(self.REG_READ_IIN) )
         return  read_iin_value
 
     def read_vout(self):
         return self.read_register(self.REG_READ_VOUT) * 2**-13
 
     def read_iout(self):
-        raw_read_iout = self.read_register(self.REG_READ_IIN)
-        read_iout_value = int((hex(raw_read_iout & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_read_iout & 0xF800) >> 11 ))
+        raw_read_iout = self.read_register(self.REG_READ_IOUT)
+        read_iout_value = self.decodePMBus(self.read_register(self.REG_READ_IOUT) )
         return  read_iout_value
 
     def read_temperature_1(self):
-        raw_read_temperature = self.read_register(self.REG_READ_TEMPERATURE_1)
-        read_temperature_value = int((hex(raw_read_temperature & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_read_temperature & 0xF800) >> 11 ))
+        read_temperature_value = self.decodePMBus(self.read_register(self.REG_READ_TEMPERATURE_1) )
         return read_temperature_value
 
     def read_temperature_2(self):
-        raw_read_temperature = self.read_register(self.REG_READ_TEMPERATURE_2)
-        read_temperature_value = int((hex(raw_read_temperature & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_read_temperature & 0xF800) >> 11 ))
+        read_temperature_value = self.decodePMBus(self.read_register(self.REG_READ_TEMPERATURE_2) )
         return read_temperature_value
 
     def read_pout(self):
-        raw_read_pout = self.read_register(self.REG_READ_IIN)
-        read_pout_value = int((hex(raw_read_pout & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_read_pout & 0xF800) >> 11 ))
+        read_pout_value = self.decodePMBus(self.read_register(self.REG_READ_POUT) )
         return  read_pout_value
 
     def read_pin(self):
-        raw_read_pin = self.read_register(self.REG_READ_IIN)
-        read_pin_value = int((hex(raw_read_pin & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_read_pin & 0xF800) >> 11 ))
+        read_pin_value = self.decodePMBus(self.read_register(self.REG_READ_PIN) )
         return read_pin_value
 
     def pm_bus_revision(self):
@@ -567,16 +557,14 @@ class LTC2975:
         if value is not None:
             self.write_register(self.REG_MFR_IOUT_CAL_GAIN_TAU_INV, value)
         else:
-            raw_mfr_iou_cal_gain_tau_inv = self.read_register(self.REG_MFR_IOUT_CAL_GAIN_TAU_INV)
-            mfr_iou_cal_gain_tau_invself_value = int((hex(raw_mfr_iou_cal_gain_tau_inv & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_mfr_iou_cal_gain_tau_inv & 0xF800) >> 11 ))
+            mfr_iou_cal_gain_tau_invself_value = self.decodePMBus(self.read_register(self.REG_MFR_IOUT_CAL_GAIN_TAU_INV) )
             return mfr_iou_cal_gain_tau_invself_value
 
     def mfr_iout_cal_gain_theta(self, value = None):
         if value is not None:
             self.write_register(self.REG_MFR_IOUT_CAL_GAIN_THETA, value)
         else:
-            raw_mfr_iout_cal_gain_theta = self.read_register(self.REG_MFR_IOUT_CAL_GAIN_THETA)
-            mfr_iout_cal_gain_theta_value = int((hex(raw_mfr_iout_cal_gain_theta & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_mfr_iout_cal_gain_theta & 0xF800) >> 11 ))
+            mfr_iout_cal_gain_theta_value = self.decodePMBus(self.read_register(self.REG_MFR_IOUT_CAL_GAIN_THETA) )
             return mfr_iout_cal_gain_theta_value
 
     def mfr_read_iout(self):
@@ -625,23 +613,19 @@ class LTC2975:
             return self.read_register(self.REG_MFR_IIN_CAL_GAIN_TC)
 
     def mfr_iin_peak(self):
-        raw_mfr_iin_peak = self.read_register(self.REG_MFR_IIN_PEAK)
-        mfr_iin_peak_value = int((hex(raw_mfr_iin_peak & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_mfr_iin_peak & 0xF800) >> 11 ))
+        mfr_iin_peak_value = self.decodePMBus(self.read_register(self.REG_MFR_IIN_PEAK) )
         return mfr_iin_peak_value
 
     def mfr_iin_min(self):
-        raw_mfr_iin_min = self.read_register(self.REG_MFR_IIN_MIN)
-        mfr_iin_min_value = int((hex(raw_mfr_iin_min & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_mfr_iin_min & 0xF800) >> 11 ))
+        mfr_iin_min_value = self.decodePMBus(self.read_register(self.REG_MFR_IIN_MIN) )
         return mfr_iin_min_value
 
     def mfr_pin_peak(self):
-        raw_mfr_pin_peak = self.read_register(self.REG_MFR_PIN_PEAK)
-        raw_mfr_pin_peak_value = int((hex(raw_mfr_pin_peak & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_mfr_pin_peak & 0xF800) >> 11 ))
+        raw_mfr_pin_peak_value = self.decodePMBus(self.read_register(self.REG_MFR_PIN_PEAK) )
         return raw_mfr_pin_peak_value
 
     def mfr_pin_min(self):
-        raw_mfr_pin_min = self.read_register(self.REG_MFR_PIN_MIN)
-        mfr_pin_min_value = int((hex(raw_mfr_pin_min & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_mfr_pin_min & 0xF800) >> 11 ))
+        mfr_pin_min_value = self.decodePMBus(self.read_register(self.REG_MFR_PIN_MIN) )
         return mfr_pin_min_value
 
     def mfr_command_plus(self, value = None):
@@ -705,13 +689,12 @@ class LTC2975:
             return self.read_register_byte(self.REG_MFR_FAULTB1_RESPONSE)
 
     def mfr_iout_peak(self):
-        raw_mfr_iout_peak = self.read_register(self.REG_MFR_IOUT_PEAK)
-        mfr_iout_peak_value = int((hex(raw_mfr_iout_peak & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_mfr_iout_peak & 0xF800) >> 11 ))
+        mfr_iout_peak_value = self.decodePMBus(self.read_register(self.REG_MFR_IOUT_PEAK) )
         return mfr_iout_peak_value
 
     def mfr_iout_min(self):
-        raw_mfr_iout_min = self.read_register(self.REG_MFR_IOUT_PEAK)
-        mfr_iout_min_value = int((hex(raw_mfr_iout_min & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_mfr_iout_min & 0xF800) >> 11 ))
+        raw_mfr_iout_min = self.read_register(self.REG_MFR_IOUT_MIN)
+        mfr_iout_min_value = self.decodePMBus(self.read_register(self.REG_MFR_IOUT_MIN) )
         return mfr_iout_min_value
 
     def mfr_config2_ltm4673(self, value = None):
@@ -730,16 +713,14 @@ class LTC2975:
         if value is not None:
             self.write_register(self.REG_MFR_RETRY_DELAY, value)
         else:
-            raw_mfr_retry_delay = self.read_register(self.REG_MFR_RETRY_DELAY)
-            mfr_retry_delay_value = int((hex(raw_mfr_retry_delay & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_mfr_retry_delay & 0xF800) >> 11 ))
+            mfr_retry_delay_value = self.decodePMBus(self.read_register(self.REG_MFR_RETRY_DELAY) )
             return mfr_retry_delay_value
 
     def mfr_restart_delay(self, value = None):
         if value is not None:
             self.write_register(self.REG_MFR_RESTART_DELAY, value)
         else:
-            raw_mfr_restart_delay = self.read_register(self.REG_MFR_RESTART_DELAY)
-            mfr_restart_delay_value = int((hex(raw_mfr_restart_delay & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_mfr_restart_delay & 0xF800) >> 11 ))
+            mfr_restart_delay_value = self.decodePMBus(self.read_register(self.REG_MFR_RESTART_DELAY) )
             return mfr_restart_delay_value
 
     def mfr_vout_peak(self):
@@ -761,16 +742,14 @@ class LTC2975:
         if value is not None:
             self.write_register(self.REG_MFR_POWERGOOD_ASSERTION_DELAY, value)
         else:
-            raw_mfr_powergood_assertion_delay = self.read_register(self.REG_MFR_POWERGOOD_ASSERTION_DELAY)
-            mfr_powergood_assertion_delay_value = int((hex(raw_mfr_powergood_assertion_delay & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_mfr_powergood_assertion_delay & 0xF800) >> 11 ))
+            mfr_powergood_assertion_delay_value = self.decodePMBus(self.read_register(self.REG_MFR_POWERGOOD_ASSERTION_DELAY) )
             return mfr_powergood_assertion_delay_value
 
     def mfr_watchdog_t_first(self, value = None):
         if value is not None:
             self.write_register(self.REG_MFR_WATCHDOG_T_FIRST, value)
         else:
-            raw_mfr_watchdog_t_first = self.read_register(self.REG_MFR_WATCHDOG_T_FIRST)
-            mfr_watchdog_t_first_value = int((hex(raw_mfr_watchdog_t_first & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_mfr_watchdog_t_first & 0xF800) >> 11 ))
+            mfr_watchdog_t_first_value = self.decodePMBus(self.read_register(self.REG_MFR_WATCHDOG_T_FIRST) )
             return mfr_watchdog_t_first_value
 
     def mfr_watchdog_t(self, value = None):
@@ -778,7 +757,7 @@ class LTC2975:
             self.write_register(self.REG_MFR_WATCHDOG_T, value)
         else:
             raw_mfr_watchdog_t = self.read_register(self.REG_MFR_WATCHDOG_T)
-            mfr_watchdog_t_value = int((hex(raw_mfr_watchdog_t & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_mfr_watchdog_t & 0xF800) >> 11 ))
+            mfr_watchdog_t_value = self.decodePMBus(self.read_register(self.REG_MFR_WATCHDOG_T) )
             return mfr_watchdog_t_value
 
     def mfr_page_ff_mask(self, value = None):
@@ -809,16 +788,14 @@ class LTC2975:
         if value is not None:
             self.write_register(self.REG_MFR_IIN_CAL_GAIN, value)
         else:
-            raw_mfr_iin_cal_gain = self.read_register(self.REG_MFR_IIN_CAL_GAIN)
-            mfr_iin_cal_gain_value = int((hex(raw_mfr_iin_cal_gain & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_mfr_iin_cal_gain & 0xF800) >> 11 ))
+            mfr_iin_cal_gain_value = self.decodePMBus(self.read_register(self.REG_MFR_IIN_CAL_GAIN) )
             return  mfr_iin_cal_gain_value
 
     def mfr_vout_discharge_threshold(self, value = None):
         if value is not None:
             self.write_register(self.REG_MFR_VOUT_DISCHARGE_THRESHOLD, value)
         else:
-            raw_mfr_vout_discharge_threshold= self.read_register(self.REG_MFR_VOUT_DISCHARGE_THRESHOLD)
-            mfr_vout_discharge_threshold_value = int((hex(raw_mfr_vout_discharge_threshold & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_mfr_vout_discharge_threshold & 0xF800) >> 11 ))
+            mfr_vout_discharge_threshold_value = self.decodePMBus(self.read_register(self.REG_MFR_VOUT_DISCHARGE_THRESHOLD) )
             return mfr_vout_discharge_threshold_value
 
     def mfr_fault_log_store(self, value):
@@ -861,19 +838,16 @@ class LTC2975:
         if value is not None:
             self.write_register(self.REG_MFR_TEMP_1_OFFSET, value)
         else:
-            raw_mfr_temp_1_offset = self.read_register(self.REG_MFR_TEMP_1_OFFSET)
-            mfr_temp_1_offset_value = int((hex(raw_mfr_temp_1_offset & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_mfr_temp_1_offset & 0xF800) >> 11 ))
+            mfr_temp_1_offset_value = self.decodePMBus(self.read_register(self.REG_MFR_TEMP_1_OFFSET) )
             return mfr_temp_1_offset_value
 
     def mfr_vout_min(self):
         return self.read_register(self.REG_MFR_VOUT_MIN) * 2**-13
 
     def mfr_vin_min(self):
-        raw_mfr_vin_min = self.read_register(self.REG_MFR_VIN_MIN)
-        mfr_vin_min_value = int((hex(raw_mfr_vin_min & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_mfr_vin_min & 0xF800) >> 11 ))
+        mfr_vin_min_value = self.decodePMBus(self.read_register(self.REG_MFR_VIN_MIN) )
         return mfr_vin_min_value
 
     def mfr_temperature_1_min(self):
-        raw_mfr_temperature_1_min = self.read_register(self.REG_MFR_TEMPERATURE_1_MIN)
-        mfr_temperature_1_min_value = int((hex(raw_mfr_temperature_1_min & 0x7FF)),16)*2**self.hex_to_signed( hex((raw_mfr_temperature_1_min & 0xF800) >> 11 ))
+        mfr_temperature_1_min_value = self.decodePMBus(self.read_register(self.REG_MFR_TEMPERATURE_1_MIN) )
         return mfr_temperature_1_min_value
