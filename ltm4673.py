@@ -236,13 +236,13 @@ class LTC2975:
             self.write_register(self.REG_VOUT_COMMAND, encode_Linear_16u(value) )
         else:
             return self.decode_Linear_16u(self.read_register(self.REG_VOUT_COMMAND) )
-            
+
     def vout_max(self, value = None):
         if value is not None:
             self.write_register(self.REG_VOUT_MAX, encode_Linear_16u(value) )
         else:
             return self.decode_Linear_16u(self.read_register(self.REG_VOUT_MAX) )
-            
+
     def vout_margin_high(self, value = None):
         if value is not None:
             self.write_register(self.REG_VOUT_MARGIN_HIGH, encode_Linear_16u(value) )
@@ -253,7 +253,7 @@ class LTC2975:
         if value is not None:
             self.write_register(self.REG_VOUT_MARGIN_LOW, encode_Linear_16u(value) )
         else:
-            return self.decode_Linear_16u(self.read_register(self.REG_VOUT_LOW) )
+            return self.decode_Linear_16u(self.read_register(self.REG_VOUT_MARGIN_LOW) )
 
     def vin_on(self, value = None):
         if value is not None:
@@ -769,7 +769,6 @@ class LTC2975:
         if value is not None:
             self.write_register(self.REG_MFR_WATCHDOG_T, encode_Linear_5s_11s(value))
         else:
-            raw_mfr_watchdog_t = self.read_register(self.REG_MFR_WATCHDOG_T)
             mfr_watchdog_t_value = self.decode_Linear_5s_11s(self.read_register(self.REG_MFR_WATCHDOG_T) )
             return mfr_watchdog_t_value
 
