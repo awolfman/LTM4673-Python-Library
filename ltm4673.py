@@ -164,6 +164,12 @@ class LTC2975:
         decode_data = value * 2**N
         return decode_data
 
+    # encode Linear_16u data format => X=Y*2^N
+    def encode_Linear_16u(self, value):
+        N = -13
+        encode_data = int(value / 2**N)
+        return encode_data
+
     def __init__(self, bus_num=DEFAULT_BUS, addr=0x40):
         self.bus = smbus.SMBus(bus_num)
         self.addr = addr
@@ -227,25 +233,25 @@ class LTC2975:
 
     def vout_command(self, value = None):
         if value is not None:
-            self.write_register(self.REG_VOUT_COMMAND, value)
+            self.write_register(self.REG_VOUT_COMMAND, encode_Linear_16u(value) )
         else:
             return self.decode_Linear_16u(self.read_register(self.REG_VOUT_COMMAND) )
             
     def vout_max(self, value = None):
         if value is not None:
-            self.write_register(self.REG_VOUT_MAX, value)
+            self.write_register(self.REG_VOUT_MAX, encode_Linear_16u(value) )
         else:
             return self.decode_Linear_16u(self.read_register(self.REG_VOUT_MAX) )
             
     def vout_margin_high(self, value = None):
         if value is not None:
-            self.write_register(self.REG_VOUT_MARGIN_HIGH, value)
+            self.write_register(self.REG_VOUT_MARGIN_HIGH, encode_Linear_16u(value) )
         else:
             return self.decode_Linear_16u(self.read_register(self.REG_VOUT_MARGIN_HIGH) )
 
     def vout_margin_low(self, value = None):
         if value is not None:
-            self.write_register(self.REG_VOUT_MARGIN_LOW, value)
+            self.write_register(self.REG_VOUT_MARGIN_LOW, encode_Linear_16u(value) )
         else:
             return self.decode_Linear_16u(self.read_register(self.REG_VOUT_LOW) )
 
@@ -269,7 +275,7 @@ class LTC2975:
 
     def vout_ov_fault_limit(self, value = None):
         if value is not None:
-            self.write_register(self.REG_VOUT_OV_FAULT_LIMIT, encode_Linear_5s_11s(value))
+            self.write_register(self.REG_VOUT_OV_FAULT_LIMIT, encode_Linear_16u(value) )
         else:
             return self.decode_Linear_16u(self.read_register(self.REG_VOUT_OV_FAULT_LIMIT) )
 
@@ -281,19 +287,19 @@ class LTC2975:
 
     def vout_ov_warn_limit(self, value = None):
         if value is not None:
-            self.write_register(self.REG_VOUT_OV_WARN_LIMIT, value )
+            self.write_register(self.REG_VOUT_OV_WARN_LIMIT, encode_Linear_16u(value)  )
         else:
             return self.decode_Linear_16u(self.read_register(self.REG_VOUT_OV_WARN_LIMIT) )
 
     def vout_uv_warn_limit(self, value = None):
         if value is not None:
-            self.write_register(self.REG_VOUT_UV_WARN_LIMIT, value )
+            self.write_register(self.REG_VOUT_UV_WARN_LIMIT, encode_Linear_16u(value)  )
         else:
             return self.decode_Linear_16u(self.read_register(self.REG_VOUT_UV_WARN_LIMIT) )
 
     def vout_uv_fault_limit(self, value = None):
         if value is not None:
-            self.write_register(self.REG_VOUT_UV_FAULT_LIMIT, value )
+            self.write_register(self.REG_VOUT_UV_FAULT_LIMIT, encode_Linear_16u(value)  )
         else:
             return self.decode_Linear_16u(self.read_register(self.REG_VOUT_UV_FAULT_LIMIT) )
 
@@ -418,13 +424,13 @@ class LTC2975:
 
     def power_good_on(self, value = None):
         if value is not None:
-            self.write_register(self.REG_POWER_GOOD_ON, value )
+            self.write_register(self.REG_POWER_GOOD_ON, encode_Linear_16u(value)  )
         else:
             return self.decode_Linear_16u(self.read_register(self.REG_POWER_GOOD_ON) )
 
     def power_good_off(self, value = None):
         if value is not None:
-            self.write_register(self.REG_POWER_GOOD_OFF, value )
+            self.write_register(self.REG_POWER_GOOD_OFF, encode_Linear_16u(value)  )
         else:
             return self.decode_Linear_16u(self.read_register(self.REG_POWER_GOOD_OFF) )
 
