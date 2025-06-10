@@ -54,8 +54,8 @@ print (f"Status Input: {hex(sensor.status_input())}")
 # Disable write protection
 sensor.write_protect(0x00) 
 
-# Set the input voltage turn-on threshold
-sensor.vin_on(0xD200)
+# Set the input voltage turn-on threshold (volts)
+sensor.vin_on(4.5)
 
 # Servo target. Nominal DC/DC converteroutput voltage setpoint 1.2V
 sensor.vout_command(1.2)
@@ -84,5 +84,3 @@ To get the device ID:
 device_id = sensor.mfr_special_id()
 print(f"Device ID: {device_id}")
 ```
-## To Do's:
-- [ ] Implement block reading of registers
