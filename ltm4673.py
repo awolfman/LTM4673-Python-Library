@@ -1,4 +1,5 @@
 import smbus
+import math
 
 class LTC2975:
     # LTC2975 (integrated to LTM4673) Register Addresses
