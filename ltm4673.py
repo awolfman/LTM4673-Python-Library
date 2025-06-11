@@ -1,8 +1,5 @@
 import smbus
 
-# none CF registers
-# read_block_data - not work
-
 class LTC2975:
     # LTC2975 (integrated to LTM4673) Register Addresses
     REG_PAGE = 0x00
@@ -181,8 +178,8 @@ class LTC2975:
         value = self.bus.read_word_data(self.addr, reg)
         return value
 
-    def read_register_block(self, reg):
-        value = self.bus.read_block_data(self.addr, reg)
+    def read_register_block(self, reg, count):
+        value = self.bus.read_block_data(self.addr, reg, count)
         return value
 
     def write_register_byte(self, reg, value):
@@ -333,8 +330,8 @@ class LTC2975:
         if value is not None:
             self.write_register(self.REG_IOUT_UC_FAULT_LIMIT, encode_Linear_5s_11s(value))
         else:
-            raw_iout_uc_fault_limitvalue = self.decode_Linear_5s_11s(self.read_register(self.REG_IOUT_UC_FAULT_LIMIT) )
-            return  raw_iout_uc_fault_limitvalue
+            iout_uc_fault_limitvalue = self.decode_Linear_5s_11s(self.read_register(self.REG_IOUT_UC_FAULT_LIMIT) )
+            return  iout_uc_fault_limitvalue
 
     def iout_uc_fault_response(self, value = None):
         if value is not None:
@@ -493,36 +490,28 @@ class LTC2975:
         return self.read_register_byte(self.REG_STATUS_MFR_SPECIFIC)
 
     def read_vin(self):
-        read_vin_value = self.decode_Linear_5s_11s(self.read_register(self.REG_READ_VIN) )
-        return  read_vin_value
+        return  self.decode_Linear_5s_11s(self.read_register(self.REG_READ_VIN) )
 
     def read_iin(self):
-        read_iin_value = self.decode_Linear_5s_11s(self.read_register(self.REG_READ_IIN) )
-        return  read_iin_value
+        return  self.decode_Linear_5s_11s(self.read_register(self.REG_READ_IIN) )
 
     def read_vout(self):
         return self.decode_Linear_16u(self.read_register(self.REG_READ_VOUT) )
 
     def read_iout(self):
-        raw_read_iout = self.read_register(self.REG_READ_IOUT)
-        read_iout_value = self.decode_Linear_5s_11s(self.read_register(self.REG_READ_IOUT) )
-        return  read_iout_value
+        return  self.decode_Linear_5s_11s(self.read_register(self.REG_READ_IOUT) )
 
     def read_temperature_1(self):
-        read_temperature_value = self.decode_Linear_5s_11s(self.read_register(self.REG_READ_TEMPERATURE_1) )
-        return read_temperature_value
+        return self.decode_Linear_5s_11s(self.read_register(self.REG_READ_TEMPERATURE_1) )
 
     def read_temperature_2(self):
-        read_temperature_value = self.decode_Linear_5s_11s(self.read_register(self.REG_READ_TEMPERATURE_2) )
-        return read_temperature_value
+        return elf.decode_Linear_5s_11s(self.read_register(self.REG_READ_TEMPERATURE_2) )
 
     def read_pout(self):
-        read_pout_value = self.decode_Linear_5s_11s(self.read_register(self.REG_READ_POUT) )
-        return  read_pout_value
+        return self.decode_Linear_5s_11s(self.read_register(self.REG_READ_POUT) )
 
     def read_pin(self):
-        read_pin_value = self.decode_Linear_5s_11s(self.read_register(self.REG_READ_PIN) )
-        return read_pin_value
+        return self.decode_Linear_5s_11s(self.read_register(self.REG_READ_PIN) )
 
     def pm_bus_revision(self):
         return self.read_register_byte(self.REG_PMBUS_REVISION)
@@ -608,7 +597,7 @@ class LTC2975:
             return self.read_register(self.REG_MFR_EE_DATA)
 
     def mfr_ein(self):
-         return self.read_register_block(self.REG_MFR_EIN)
+         return self.read_register_block(self.REG_MFR_EIN, 12)
 
     def mfr_ein_config(self, value = None):
         if value is not None:
@@ -823,7 +812,7 @@ class LTC2975:
         return self.read_register_byte(self.REG_MFR_FAULT_LOG_STATUS)
 
     def mfr_fault_log(self):
-        return self.read_register_block(self.REG_MFR_FAULT_LOG)
+        return self.read_register_block(self.REG_MFR_FAULT_LOG, 255)
 
     def mfr_common(self):
         return self.read_register_byte(self.REG_MFR_COMMON)
