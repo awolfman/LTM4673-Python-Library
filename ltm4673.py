@@ -231,38 +231,38 @@ class LTC2975:
 
     def vout_command(self, value = None):
         if value is not None:
-            self.write_register(self.REG_VOUT_COMMAND, encode_Linear_16u(value) )
+            self.write_register(self.REG_VOUT_COMMAND, self.encode_Linear_16u(value) )
         else:
             return self.decode_Linear_16u(self.read_register(self.REG_VOUT_COMMAND) )
 
     def vout_max(self, value = None):
         if value is not None:
-            self.write_register(self.REG_VOUT_MAX, encode_Linear_16u(value) )
+            self.write_register(self.REG_VOUT_MAX, self.encode_Linear_16u(value) )
         else:
             return self.decode_Linear_16u(self.read_register(self.REG_VOUT_MAX) )
 
     def vout_margin_high(self, value = None):
         if value is not None:
-            self.write_register(self.REG_VOUT_MARGIN_HIGH, encode_Linear_16u(value) )
+            self.write_register(self.REG_VOUT_MARGIN_HIGH, self.encode_Linear_16u(value) )
         else:
             return self.decode_Linear_16u(self.read_register(self.REG_VOUT_MARGIN_HIGH) )
 
     def vout_margin_low(self, value = None):
         if value is not None:
-            self.write_register(self.REG_VOUT_MARGIN_LOW, encode_Linear_16u(value) )
+            self.write_register(self.REG_VOUT_MARGIN_LOW, self.encode_Linear_16u(value) )
         else:
             return self.decode_Linear_16u(self.read_register(self.REG_VOUT_MARGIN_LOW) )
 
     def vin_on(self, value = None):
         if value is not None:
-            self.write_register(self.REG_VIN_ON, encode_Linear_5s_11s(value) )
+            self.write_register(self.REG_VIN_ON, self.encode_Linear_5s_11s(value) )
         else:
             vin_on_value = self.decode_Linear_5s_11s(self.read_register(self.REG_VIN_ON) )
             return  vin_on_value
 
     def vin_off(self, value = None):
         if value is not None:
-            self.write_register(self.REG_VIN_OFF, encode_Linear_5s_11s(value))
+            self.write_register(self.REG_VIN_OFF, self.encode_Linear_5s_11s(value))
         else:
             vin_off_value = self.decode_Linear_5s_11s(self.read_register(self.REG_VIN_OFF) )
             return  vin_off_value
@@ -273,7 +273,7 @@ class LTC2975:
 
     def vout_ov_fault_limit(self, value = None):
         if value is not None:
-            self.write_register(self.REG_VOUT_OV_FAULT_LIMIT, encode_Linear_16u(value) )
+            self.write_register(self.REG_VOUT_OV_FAULT_LIMIT, self.encode_Linear_16u(value) )
         else:
             return self.decode_Linear_16u(self.read_register(self.REG_VOUT_OV_FAULT_LIMIT) )
 
@@ -285,19 +285,19 @@ class LTC2975:
 
     def vout_ov_warn_limit(self, value = None):
         if value is not None:
-            self.write_register(self.REG_VOUT_OV_WARN_LIMIT, encode_Linear_16u(value)  )
+            self.write_register(self.REG_VOUT_OV_WARN_LIMIT, self.encode_Linear_16u(value)  )
         else:
             return self.decode_Linear_16u(self.read_register(self.REG_VOUT_OV_WARN_LIMIT) )
 
     def vout_uv_warn_limit(self, value = None):
         if value is not None:
-            self.write_register(self.REG_VOUT_UV_WARN_LIMIT, encode_Linear_16u(value)  )
+            self.write_register(self.REG_VOUT_UV_WARN_LIMIT, self.encode_Linear_16u(value)  )
         else:
             return self.decode_Linear_16u(self.read_register(self.REG_VOUT_UV_WARN_LIMIT) )
 
     def vout_uv_fault_limit(self, value = None):
         if value is not None:
-            self.write_register(self.REG_VOUT_UV_FAULT_LIMIT, encode_Linear_16u(value)  )
+            self.write_register(self.REG_VOUT_UV_FAULT_LIMIT, self.encode_Linear_16u(value)  )
         else:
             return self.decode_Linear_16u(self.read_register(self.REG_VOUT_UV_FAULT_LIMIT) )
 
@@ -309,7 +309,7 @@ class LTC2975:
 
     def iout_oc_fault_limit(self, value = None):
         if value is not None:
-            self.write_register(self.REG_IOUT_OC_FAULT_LIMIT, encode_Linear_5s_11s(value))
+            self.write_register(self.REG_IOUT_OC_FAULT_LIMIT, self.encode_Linear_5s_11s(value))
         else:
             iout_oc_fault_limit_value = self.decode_Linear_5s_11s(self.read_register(self.REG_IOUT_OC_FAULT_LIMIT) )
             return  iout_oc_fault_limit_value
@@ -322,14 +322,14 @@ class LTC2975:
 
     def iout_oc_warn_limit(self, value = None):
         if value is not None:
-            self.write_register(self.REG_IOUT_OC_WARN_LIMIT, encode_Linear_5s_11s(value))
+            self.write_register(self.REG_IOUT_OC_WARN_LIMIT, self.encode_Linear_5s_11s(value))
         else:
             iout_oc_warn_limit_value = self.decode_Linear_5s_11s(self.read_register(self.REG_IOUT_OC_WARN_LIMIT) )
             return  iout_oc_warn_limit_value
 
     def iout_uc_fault_limit(self, value = None):
         if value is not None:
-            self.write_register(self.REG_IOUT_UC_FAULT_LIMIT, encode_Linear_5s_11s(value))
+            self.write_register(self.REG_IOUT_UC_FAULT_LIMIT, self.encode_Linear_5s_11s(value))
         else:
             iout_uc_fault_limitvalue = self.decode_Linear_5s_11s(self.read_register(self.REG_IOUT_UC_FAULT_LIMIT) )
             return  iout_uc_fault_limitvalue
@@ -342,7 +342,7 @@ class LTC2975:
 
     def ot_fault_limit(self, value = None):
         if value is not None:
-            self.write_register(self.REG_OT_FAULT_LIMIT, encode_Linear_5s_11s(value))
+            self.write_register(self.REG_OT_FAULT_LIMIT, self.encode_Linear_5s_11s(value))
         else:
             ot_fault_limitvalue = self.decode_Linear_5s_11s(self.read_register(self.REG_OT_FAULT_LIMIT) )
             return  ot_fault_limitvalue
@@ -355,21 +355,21 @@ class LTC2975:
 
     def ot_warn_limit(self, value = None):
         if value is not None:
-            self.write_register(self.REG_OT_WARN_LIMIT, encode_Linear_5s_11s(value))
+            self.write_register(self.REG_OT_WARN_LIMIT, self.encode_Linear_5s_11s(value))
         else:
             ot_warn_limit_value = self.decode_Linear_5s_11s(self.read_register(self.REG_OT_WARN_LIMIT) )
             return  ot_warn_limit_value
 
     def ut_warn_limit(self, value = None):
         if value is not None:
-            self.write_register(self.REG_UT_WARN_LIMIT, encode_Linear_5s_11s(value))
+            self.write_register(self.REG_UT_WARN_LIMIT, self.encode_Linear_5s_11s(value))
         else:
             ut_warn_limit_value = self.decode_Linear_5s_11s(self.read_register(self.REG_UT_WARN_LIMIT) )
             return  ut_warn_limit_value
 
     def ut_fault_limit(self, value = None):
         if value is not None:
-            self.write_register(self.REG_UT_FAULT_LIMIT, encode_Linear_5s_11s(value))
+            self.write_register(self.REG_UT_FAULT_LIMIT, self.encode_Linear_5s_11s(value))
         else:
             ut_fault_limit_value = self.decode_Linear_5s_11s(self.read_register(self.REG_UT_FAULT_LIMIT) )
             return  ut_fault_limit_value
@@ -382,7 +382,7 @@ class LTC2975:
 
     def vin_ov_fault_limit(self, value = None):
         if value is not None:
-            self.write_register(self.REG_VIN_OV_FAULT_LIMIT, encode_Linear_5s_11s(value))
+            self.write_register(self.REG_VIN_OV_FAULT_LIMIT, self.encode_Linear_5s_11s(value))
         else:
             vin_ov_fault_limit_value = self.decode_Linear_5s_11s(self.read_register(self.REG_VIN_OV_FAULT_LIMIT) )
             return  vin_ov_fault_limit_value
@@ -395,21 +395,21 @@ class LTC2975:
 
     def vin_ov_warn_limit(self, value = None):
         if value is not None:
-            self.write_register(self.REG_VIN_OV_WARN_LIMIT, encode_Linear_5s_11s(value))
+            self.write_register(self.REG_VIN_OV_WARN_LIMIT, self.encode_Linear_5s_11s(value))
         else:
             vin_ov_warn_limit_value = self.decode_Linear_5s_11s(self.read_register(self.REG_VIN_OV_WARN_LIMIT) )
             return  vin_ov_warn_limit_value
 
     def vin_uv_warn_limit(self, value = None):
         if value is not None:
-            self.write_register(self.REG_VIN_UV_WARN_LIMIT, encode_Linear_5s_11s(value))
+            self.write_register(self.REG_VIN_UV_WARN_LIMIT, self.encode_Linear_5s_11s(value))
         else:
             vin_uv_warn_limit_value = self.decode_Linear_5s_11s(self.read_register(self.REG_VIN_UV_WARN_LIMIT) )
             return  vin_uv_warn_limit_value
 
     def vin_uv_fault_limit(self, value = None):
         if value is not None:
-            self.write_register(self.REG_VIN_UV_FAULT_LIMIT, encode_Linear_5s_11s(value))
+            self.write_register(self.REG_VIN_UV_FAULT_LIMIT, self.encode_Linear_5s_11s(value))
         else:
             vin_uv_fault_limit_value = self.decode_Linear_5s_11s(self.read_register(self.REG_VIN_UV_FAULT_LIMIT) )
             return  vin_uv_fault_limit_value
@@ -422,33 +422,33 @@ class LTC2975:
 
     def power_good_on(self, value = None):
         if value is not None:
-            self.write_register(self.REG_POWER_GOOD_ON, encode_Linear_16u(value)  )
+            self.write_register(self.REG_POWER_GOOD_ON, self.encode_Linear_16u(value)  )
         else:
             return self.decode_Linear_16u(self.read_register(self.REG_POWER_GOOD_ON) )
 
     def power_good_off(self, value = None):
         if value is not None:
-            self.write_register(self.REG_POWER_GOOD_OFF, encode_Linear_16u(value)  )
+            self.write_register(self.REG_POWER_GOOD_OFF, self.encode_Linear_16u(value)  )
         else:
             return self.decode_Linear_16u(self.read_register(self.REG_POWER_GOOD_OFF) )
 
     def ton_delay(self, value = None):
         if value is not None:
-            self.write_register(self.REG_TON_DELAY, encode_Linear_5s_11s(value))
+            self.write_register(self.REG_TON_DELAY, self.encode_Linear_5s_11s(value))
         else:
             ton_delay_value = self.decode_Linear_5s_11s(self.read_register(self.REG_TON_DELAY) )
             return  ton_delay_value
 
     def ton_rise(self, value = None):
         if value is not None:
-            self.write_register(self.REG_TON_RISE, encode_Linear_5s_11s(value))
+            self.write_register(self.REG_TON_RISE, self.encode_Linear_5s_11s(value))
         else:
             ton_rise_value = self.decode_Linear_5s_11s(self.read_register(self.REG_TON_RISE) )
             return  ton_rise_value
 
     def ton_max_fault_limit(self, value = None):
         if value is not None:
-            self.write_register(self.REG_TON_MAX_FAULT_LIMIT, encode_Linear_5s_11s(value))
+            self.write_register(self.REG_TON_MAX_FAULT_LIMIT, self.encode_Linear_5s_11s(value))
         else:
             ton_max_fault_limit_value = self.decode_Linear_5s_11s(self.read_register(self.REG_TON_MAX_FAULT_LIMIT) )
             return  ton_max_fault_limit_value
@@ -461,7 +461,7 @@ class LTC2975:
 
     def toff_delay(self, value = None):
         if value is not None:
-            self.write_register(self.REG_TOFF_DELAY, encode_Linear_5s_11s(value))
+            self.write_register(self.REG_TOFF_DELAY, self.encode_Linear_5s_11s(value))
         else:
             toff_delay_value = self.decode_Linear_5s_11s(self.read_register(self.REG_TOFF_DELAY) )
             return  toff_delay_value
@@ -558,14 +558,14 @@ class LTC2975:
 
     def mfr_iou_cal_gain_tau_inv(self, value = None):
         if value is not None:
-            self.write_register(self.REG_MFR_IOUT_CAL_GAIN_TAU_INV, encode_Linear_5s_11s(value))
+            self.write_register(self.REG_MFR_IOUT_CAL_GAIN_TAU_INV, self.encode_Linear_5s_11s(value))
         else:
             mfr_iou_cal_gain_tau_invself_value = self.decode_Linear_5s_11s(self.read_register(self.REG_MFR_IOUT_CAL_GAIN_TAU_INV) )
             return mfr_iou_cal_gain_tau_invself_value
 
     def mfr_iout_cal_gain_theta(self, value = None):
         if value is not None:
-            self.write_register(self.REG_MFR_IOUT_CAL_GAIN_THETA, encode_Linear_5s_11s(value))
+            self.write_register(self.REG_MFR_IOUT_CAL_GAIN_THETA, self.encode_Linear_5s_11s(value))
         else:
             mfr_iout_cal_gain_theta_value = self.decode_Linear_5s_11s(self.read_register(self.REG_MFR_IOUT_CAL_GAIN_THETA) )
             return mfr_iout_cal_gain_theta_value
@@ -714,14 +714,14 @@ class LTC2975:
 
     def mfr_retry_delay(self, value = None):
         if value is not None:
-            self.write_register(self.REG_MFR_RETRY_DELAY, encode_Linear_5s_11s(value))
+            self.write_register(self.REG_MFR_RETRY_DELAY, self.encode_Linear_5s_11s(value))
         else:
             mfr_retry_delay_value = self.decode_Linear_5s_11s(self.read_register(self.REG_MFR_RETRY_DELAY) )
             return mfr_retry_delay_value
 
     def mfr_restart_delay(self, value = None):
         if value is not None:
-            self.write_register(self.REG_MFR_RESTART_DELAY, encode_Linear_5s_11s(value))
+            self.write_register(self.REG_MFR_RESTART_DELAY, self.encode_Linear_5s_11s(value))
         else:
             mfr_restart_delay_value = self.decode_Linear_5s_11s(self.read_register(self.REG_MFR_RESTART_DELAY) )
             return mfr_restart_delay_value
@@ -743,21 +743,21 @@ class LTC2975:
 
     def mfr_powergood_assertion_delay(self, value = None):
         if value is not None:
-            self.write_register(self.REG_MFR_POWERGOOD_ASSERTION_DELAY, encode_Linear_5s_11s(value))
+            self.write_register(self.REG_MFR_POWERGOOD_ASSERTION_DELAY, self.encode_Linear_5s_11s(value))
         else:
             mfr_powergood_assertion_delay_value = self.decode_Linear_5s_11s(self.read_register(self.REG_MFR_POWERGOOD_ASSERTION_DELAY) )
             return mfr_powergood_assertion_delay_value
 
     def mfr_watchdog_t_first(self, value = None):
         if value is not None:
-            self.write_register(self.REG_MFR_WATCHDOG_T_FIRST, encode_Linear_5s_11s(value))
+            self.write_register(self.REG_MFR_WATCHDOG_T_FIRST, self.encode_Linear_5s_11s(value))
         else:
             mfr_watchdog_t_first_value = self.decode_Linear_5s_11s(self.read_register(self.REG_MFR_WATCHDOG_T_FIRST) )
             return mfr_watchdog_t_first_value
 
     def mfr_watchdog_t(self, value = None):
         if value is not None:
-            self.write_register(self.REG_MFR_WATCHDOG_T, encode_Linear_5s_11s(value))
+            self.write_register(self.REG_MFR_WATCHDOG_T, self.encode_Linear_5s_11s(value))
         else:
             mfr_watchdog_t_value = self.decode_Linear_5s_11s(self.read_register(self.REG_MFR_WATCHDOG_T) )
             return mfr_watchdog_t_value
@@ -788,14 +788,14 @@ class LTC2975:
 
     def mfr_iin_cal_gain(self, value = None):
         if value is not None:
-            self.write_register(self.REG_MFR_IIN_CAL_GAIN, encode_Linear_5s_11s(value))
+            self.write_register(self.REG_MFR_IIN_CAL_GAIN, self.encode_Linear_5s_11s(value))
         else:
             mfr_iin_cal_gain_value = self.decode_Linear_5s_11s(self.read_register(self.REG_MFR_IIN_CAL_GAIN) )
             return  mfr_iin_cal_gain_value
 
     def mfr_vout_discharge_threshold(self, value = None):
         if value is not None:
-            self.write_register(self.REG_MFR_VOUT_DISCHARGE_THRESHOLD, encode_Linear_5s_11s(value))
+            self.write_register(self.REG_MFR_VOUT_DISCHARGE_THRESHOLD, self.encode_Linear_5s_11s(value))
         else:
             mfr_vout_discharge_threshold_value = self.decode_Linear_5s_11s(self.read_register(self.REG_MFR_VOUT_DISCHARGE_THRESHOLD) )
             return mfr_vout_discharge_threshold_value
@@ -838,7 +838,7 @@ class LTC2975:
 
     def mfr_temp_1_offset(self, value = None):
         if value is not None:
-            self.write_register(self.REG_MFR_TEMP_1_OFFSET, encode_Linear_5s_11s(value))
+            self.write_register(self.REG_MFR_TEMP_1_OFFSET, self.encode_Linear_5s_11s(value))
         else:
             mfr_temp_1_offset_value = self.decode_Linear_5s_11s(self.read_register(self.REG_MFR_TEMP_1_OFFSET) )
             return mfr_temp_1_offset_value
