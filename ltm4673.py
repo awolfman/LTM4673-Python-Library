@@ -627,7 +627,7 @@ class LTC2975:
             return self.read_register(self.REG_MFR_EE_DATA)
 
     def mfr_ein(self):
-         return self.read_register_block(self.REG_MFR_EIN, 12)
+         return self.read_register_block(self.REG_MFR_EIN)
 
     def mfr_ein_config(self, value = None):
         if value is not None:
@@ -841,7 +841,7 @@ class LTC2975:
         return self.read_register_byte(self.REG_MFR_FAULT_LOG_STATUS)
 
     def mfr_fault_log(self):
-        return self.read_register_block(self.REG_MFR_FAULT_LOG, 255)
+        return self.read_register_block(self.REG_MFR_FAULT_LOG)
 
     def mfr_common(self):
         return self.read_register_byte(self.REG_MFR_COMMON)
