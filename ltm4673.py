@@ -722,7 +722,6 @@ class LTC2975:
         return mfr_iout_peak_value
 
     def mfr_iout_min(self):
-        raw_mfr_iout_min = self.read_register(self.REG_MFR_IOUT_MIN)
         mfr_iout_min_value = self.decode_Linear_5s_11s(self.read_register(self.REG_MFR_IOUT_MIN) )
         return mfr_iout_min_value
 
