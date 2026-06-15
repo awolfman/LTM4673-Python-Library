@@ -207,7 +207,7 @@ class LTC2975:
         return value
 
     def read_register_block(self, reg):
-        return return self.bus.read_block_data(self.addr, reg)
+        return self.bus.read_block_data(self.addr, reg)
 
     def write_register_byte(self, reg, value):
         self.bus.write_byte_data(self.addr, reg, value)
@@ -247,15 +247,15 @@ class LTC2975:
             return self.read_register_byte(self.REG_WRITE_PROTECT)
 
     def store_user_all(self, value):
-            self.write_register_byte(self.REG_STORE_USER_ALL, value)
+            self.send_command_only(self.REG_STORE_USER_ALL)
 
     def restore_user_all(self, value):
-            self.write_register_byte(self.REG_RESTORE_USER_ALL, value)
+            self.send_command_only(self.REG_RESTORE_USER_ALL)
 
     def capability(self):
         return self.read_register_byte(self.REG_CAPABILITY)
 
-    def vout_mode(self, value = None):
+    def vout_mode(self):
         return self.read_register_byte(self.REG_VOUT_MODE)
 
     def vout_command(self, value = None):
