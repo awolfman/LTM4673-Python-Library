@@ -532,7 +532,7 @@ class LTC2975:
         return self.decode_Linear_5s_11s(self.read_register(self.REG_READ_TEMPERATURE_1) )
 
     def read_temperature_2(self):
-        return elf.decode_Linear_5s_11s(self.read_register(self.REG_READ_TEMPERATURE_2) )
+        return self.decode_Linear_5s_11s(self.read_register(self.REG_READ_TEMPERATURE_2) )
 
     def read_pout(self):
         return self.decode_Linear_5s_11s(self.read_register(self.REG_READ_POUT) )
