@@ -135,25 +135,43 @@ class LTC2975:
     DEFAULT_BUS = 1
     N = 2**-13
 
-    #method for computing twos complement
+    # Метод для декодирования дополнительного кода
     def twos_comp(self, val, bits):
-        #compute the 2's complement of int value val
-        if (val & (1 << (bits - 1))) != 0: # if sign bit is set e.g., 8bit: 128-255
-            val = val - (1 << bits)        # compute negative value
+        val = val & ((1 << bits) - 1)  # Ограничиваем разрядность
+        if (val & (1 << (bits - 1))) != 0:
+            val = val - (1 << bits)
         return val
 
-    #Decode/encode Linear data format => X=Y*2^N
-    def decode_Linear_5s_11s(self, value)
-        N = value >> 11
-        Y = value & 0x7FF
-        decode_data = Y*2**(self.twos_comp(N, 5))
-        return decode_data
+    # Декодирование формата Linear11 (5s + 11s)
+    def decode_linear_5s_11s(self, value):
+        # Извлекаем n (старшие 5 бит) и y (младшие 11 бит)
+        n_raw = (value >> 11) & 0x1F
+        y_raw = value & 0x7FF        
+        # Переводим оба числа из дополнительного кода
+        n = self.twos_comp(n_raw, 5)
+        y = self.twos_comp(y_raw, 11)        
+        # Вычисляем x = y * 2^n
+        return float(y * (2**n))
 
-    def encode_Linear_5s_11s(self, value):
-        YMAX = 1023.0
-        Nval = int(math.log(value/YMAX, 2))
-        Yval = int(value * (2**-Nval))
-        encode_data = ((Nval & 0x1F) << 11) | Yval
+    # Кодирование формата Linear11 (5s + 11s)
+    def encode_linear_5s_11s(self, value):
+        # Обработка нуля
+        if value == 0:
+            return 0            
+        ymax = 1023.0  # Максимальное значение для 11-битного знакового целого (от -1024 до 1023)
+        ymin = -1024.0        
+        # Находим порядок nval
+        nval = int(math.ceil(math.log2(abs(value) / ymax)))        
+        # Ограничиваем nval в пределах 5-битного знакового целого (от -16 до 15)
+        nval = max(-16, min(15, nval))        
+        # Вычисляем мантиссу yval
+        yval = int(round(value * (2**-nval)))        
+        # Проверяем, чтобы yval не вышел за границы 11 бит из-за округления
+        if yval > ymax or yval < ymin:
+            nval += 1
+            yval = int(round(value * (2**-nval)))            
+        # Упаковываем в 5s и 11s (применяем маски для корректного представления отрицательных чисел)
+        encode_data = ((nval & 0x1F) << 11) | (yval & 0x7FF)
         return encode_data
 
     # decode Linear_16u data format => X=Y*2^N
