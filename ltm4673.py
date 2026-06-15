@@ -246,10 +246,10 @@ class LTC2975:
         else:
             return self.read_register_byte(self.REG_WRITE_PROTECT)
 
-    def store_user_all(self, value):
+    def store_user_all(self):
             self.send_command_only(self.REG_STORE_USER_ALL)
 
-    def restore_user_all(self, value):
+    def restore_user_all(self):
             self.send_command_only(self.REG_RESTORE_USER_ALL)
 
     def capability(self):
