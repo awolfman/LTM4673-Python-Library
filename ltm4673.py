@@ -79,6 +79,7 @@ class LTC2975:
     REG_MFR_LTC_RESERVED_2 = 0xBC
     REG_MFR_EE_UNLOCK = 0xBD
     REG_MFR_EE_ERASE = 0xBE
+    REG_MFR_EE_DATA = 0xBF
     REG_MFR_EIN = 0xC0
     REG_MFR_EIN_CONFIG = 0xC1
     REG_MFR_IIN_CAL_GAIN = 0xE8
@@ -205,9 +206,8 @@ class LTC2975:
         value = self.bus.read_word_data(self.addr, reg)
         return value
 
-    def read_register_block(self, reg, count):
-        value = self.bus.read_block_data(self.addr, reg, count)
-        return value
+    def read_register_block(self, reg):
+        return return self.bus.read_block_data(self.addr, reg)
 
     def write_register_byte(self, reg, value):
         self.bus.write_byte_data(self.addr, reg, value)
@@ -215,6 +215,9 @@ class LTC2975:
     def read_register_byte(self, reg):
         value = self.bus.read_byte_data(self.addr, reg)
         return value
+
+    def send_command_only(self, reg):
+        self.bus.write_byte(self.addr, reg)
 
     def page(self, value = None):
         if value is not None:
@@ -234,8 +237,8 @@ class LTC2975:
         else:
             return self.read_register_byte(self.REG_ON_OFF_CONFIG)
             
-    def clear_faults(self, value):
-            self.write_register_byte(self.REG_CLEAR_FAULTS, value)
+    def clear_faults(self):
+            self.send_command_only(self.REG_CLEAR_FAULTS)
 
     def write_protect(self, value = None):
         if value is not None:
