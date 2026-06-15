@@ -582,7 +582,7 @@ class LTC2975:
     def mfr_t_self_heat(self):
          return self.read_register(self.REG_MFR_T_SELF_HEAT)
 
-    def mfr_iou_cal_gain_tau_inv(self, value = None):
+    def mfr_iout_cal_gain_tau_inv(self, value = None):
         if value is not None:
             self.write_register(self.REG_MFR_IOUT_CAL_GAIN_TAU_INV, self.encode_Linear_5s_11s(value))
         else:
