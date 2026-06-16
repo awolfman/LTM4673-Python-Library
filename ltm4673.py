@@ -144,7 +144,7 @@ class LTC2975:
         return val
 
     # Декодирование формата Linear11 (5s + 11s)
-    def decode_linear_5s_11s(self, value):
+    def decode_Linear_5s_11s(self, value):
         # Извлекаем n (старшие 5 бит) и y (младшие 11 бит)
         n_raw = (value >> 11) & 0x1F
         y_raw = value & 0x7FF        
@@ -155,7 +155,7 @@ class LTC2975:
         return float(y * (2**n))
 
     # Кодирование формата Linear11 (5s + 11s)
-    def encode_linear_5s_11s(self, value):
+    def encode_Linear_5s_11s(self, value):
         # Обработка нуля
         if value == 0:
             return 0            
