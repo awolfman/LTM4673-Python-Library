@@ -176,23 +176,29 @@ class LTC2975:
         return encode_data
 
     # decode Linear_16u data format => X=Y*2^N
-    def decode_Linear_16u(self, value, n=-13):
+    def decode_Linear_16u(self, value, n=None):
+        # Если n не передано, автоматически определяем его из VOUT_MODE
+        if n is None:
+            n = self.twos_comp(self.vout_mode() & 0x1F, 5)
         # Ограничиваем входное значение 16 битами (0 - 65535)
-        y = value & 0xFFFF        
+        y = value & 0xFFFF 
         # Вычисляем x = y * 2^n
         decode_data = float(y * (2**n))
         return decode_data
 
     # encode Linear_16u data format => X=Y*2^N
-    def encode_Linear_16u(self, value, n=-13):
+    def encode_Linear_16u(self, value, n=None):
+        # Если n не передано, автоматически определяем его из VOUT_MODE
+        if n is None:
+            n = self.twos_comp(self.vout_mode() & 0x1F, 5)
         # Защита от отрицательных значений (Linear16u принимает только >= 0)
         if value <= 0:
-            return 0            
+            return 0 
         # Округляем до ближайшего целого
-        encode_data = int(round(value / (2**n)))        
+        encode_data = int(round(value / (2**n))) 
         # Защита от переполнения: значение не должно превышать 16 бит (65535)
         if encode_data > 0xFFFF:
-            return 0xFFFF            
+            return 0xFFFF 
         return encode_data
 
     def __init__(self, bus_num=DEFAULT_BUS, addr=0x40):
